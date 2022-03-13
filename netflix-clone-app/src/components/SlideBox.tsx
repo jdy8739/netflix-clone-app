@@ -11,10 +11,11 @@ const BoxElem = styled(motion.div)`
     background-size: cover;
     width: 100%;
     height: 100%;
+    color: white;
 `;
 
 const Info = styled(motion.div)`
-    background-color: red;
+    background-color: rgb(34, 34, 36);
     width: 100%;
     height: 45px;
     display: flex;
@@ -30,17 +31,6 @@ const Thumbnail = styled.img`
     margin-bottom: -5px;
 `;
 
-const boxVariant = {
-    hover: {
-        scale: 1.4,
-        y: -125,
-        zIndex: 99,
-        transition: {
-            type: 'tween'
-        }
-    }
-};
-
 const infoVariant = {
     hover: {
         opacity: 1
@@ -54,8 +44,6 @@ function SlideBox({ movieInfo }: { movieInfo?: INowPlayingResult }) {
 
     return (
         <BoxElem
-        variants={boxVariant}
-        whileHover="hover"
         onClick={() => nav(`/movie/${movieInfo?.id}`)}
         layoutId={movieInfo?.id + ''}
         >

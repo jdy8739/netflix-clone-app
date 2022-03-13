@@ -1,9 +1,10 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router";
 import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
+import Modal from "../components/Modal";
 import SlideBox from "../components/SlideBox";
 import { makeImagePath } from "../utils";
 
@@ -68,14 +69,15 @@ const ModalBackground = styled(motion.div)`
 
 const ModalWindow = styled(motion.div)`
     background-color: white;
-    width: 460px;
-    height: 300px;
-    border-radius: 20px;
+    width: 620px;
+    height: 560px;
+    border-radius: 8px;
     position: absolute;
     left: 0;
     right: 0;
-    top: ${window.innerHeight - window.innerHeight / 1.5}px;
+    top: ${window.innerHeight - window.innerHeight / 1.2}px;
     margin: auto;
+    overflow: hidden;
 `;
 
 const modalVariant = {
@@ -84,6 +86,17 @@ const modalVariant = {
     },
     visible: {
         opacity: 1
+    }
+};
+
+const boxVariant = {
+    hover: {
+        scale: 1.4,
+        y: -125,
+        zIndex: 99,
+        transition: {
+            type: 'tween'
+        }
     }
 };
 
@@ -124,6 +137,14 @@ function Home() {
 
     const nav = useNavigate();
 
+    const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation();
+    };
+
+    const clickedMovie = 
+    movieMatch?.params.Id && 
+    nowPlaying?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
+
     return (
         <>
             <Banner 
@@ -153,11 +174,16 @@ function Home() {
                     }}
                     >
                         {
-                            nowPlaying?.results.slice(BOX_OFFSET)
+                            nowPlaying?.results
+                            .slice(BOX_OFFSET)
                             .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
                             .map((movie, i) => {
                                 return (
-                                    <Box key={i}>
+                                    <Box 
+                                    key={i}
+                                    variants={boxVariant}
+                                    whileHover="hover"
+                                    >
                                         <SlideBox 
                                         movieInfo={ movie }
                                         />
@@ -179,7 +205,11 @@ function Home() {
                     exit="hidden"
                     onClick={() => nav('/')}
                     >
-                        <ModalWindow layoutId={movieMatch?.params.Id}/>
+                        <ModalWindow 
+                        layoutId={movieMatch?.params.Id} 
+                        onClick={handleOnClick}>
+                            <Modal clickedMovie={clickedMovie || undefined}/>
+                        </ModalWindow>
                     </ModalBackground>
                 </AnimatePresence>
             }
