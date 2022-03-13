@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { useMatch, useNavigate } from "react-router";
 import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
 import SlideBox from "../components/SlideBox";
@@ -48,7 +49,6 @@ const Row = styled(motion.div)`
 `;
 
 const Box = styled(motion.div)`
-    background-color: red;
     height: 150px;
     &:first-child {
         transform-origin: center left;
@@ -58,20 +58,38 @@ const Box = styled(motion.div)`
     }
 `;
 
+const ModalBackground = styled(motion.div)`
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+`;
+
+const ModalWindow = styled(motion.div)`
+    background-color: white;
+    width: 460px;
+    height: 300px;
+    border-radius: 20px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: ${window.innerHeight - window.innerHeight / 1.5}px;
+    margin: auto;
+`;
+
+const modalVariant = {
+    hidden: {
+        opacity: 0
+    },
+    visible: {
+        opacity: 1
+    }
+};
+
 const BOX_OFFSET = 1;
 
 const NUM_OF_BOX_IN_A_ROW = 6;
-
-const boxVariant = {
-    hover: {
-        scale: 1.4,
-        y: -50,
-        zIndex: 100,
-        transition: {
-            type: 'tween'
-        }
-    }
-};
 
 function Home() {
 
@@ -102,6 +120,10 @@ function Home() {
         } else return;
     };
 
+    const movieMatch = useMatch('/movie/:Id');
+
+    const nav = useNavigate();
+
     return (
         <>
             <Banner 
@@ -131,15 +153,14 @@ function Home() {
                     }}
                     >
                         {
-                            [0, 1, 2, 3, 4, 5].map(item => {
+                            nowPlaying?.results.slice(BOX_OFFSET)
+                            .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
+                            .map((movie, i) => {
                                 return (
-                                    <Box 
-                                    key={item}
-                                    variants={boxVariant}
-                                    whileHover="hover"
-                                    >
+                                    <Box key={i}>
                                         <SlideBox 
-                                        movieInfo={ nowPlaying?.results[index * NUM_OF_BOX_IN_A_ROW + item + BOX_OFFSET] } />
+                                        movieInfo={ movie }
+                                        />
                                     </Box>
                                 )
                             })
@@ -147,6 +168,21 @@ function Home() {
                     </Row>
                 </AnimatePresence>
             </Slider>
+            {
+                movieMatch === null ? null : 
+                <AnimatePresence>
+                    <ModalBackground
+                    key={movieMatch.params.Id}
+                    variants={modalVariant}
+                    initial="hidden"
+                    animate="visible"
+                    exit="hidden"
+                    onClick={() => nav('/')}
+                    >
+                        <ModalWindow layoutId={movieMatch?.params.Id}/>
+                    </ModalBackground>
+                </AnimatePresence>
+            }
         </>
     )
 };
