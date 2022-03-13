@@ -1,6 +1,6 @@
 import { motion, useAnimation, useTransform, useViewportScroll } from "framer-motion";
-import { useEffect, useState } from "react";
-import { useMatch } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useMatch, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -28,7 +28,7 @@ const Nav = styled.div`
     position: relative;
 `;
 
-const SearchBar = styled.div`
+const SearchForm = styled.form`
     padding: 24px;
 `;
 
@@ -77,6 +77,8 @@ function Header() {
 
     const navAnimation = useAnimation();
 
+    const nav = useNavigate();
+
     useEffect(() => {
         scrollY.onChange(function() {
             if(scrollY.get() < 80) {
@@ -90,6 +92,16 @@ function Header() {
         [0, 80],
         ["rgba(0, 0, 0, 0.1)", "rgba(0, 0, 0, 1.0)"]
     );
+
+    const [keyword, setKeyword] = useState('');
+
+    const searchKeyword = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        nav(`/search?keyword=${keyword}`);
+        setKeyword('');
+    };
+
+    const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => setKeyword(e.currentTarget.value);
 
     return (
         <>
@@ -131,9 +143,9 @@ function Header() {
                     }
                 </Nav>
                 <div style={{ flexGrow: 1 }}></div>
-                <SearchBar>
-                    <input />
-                </SearchBar>
+                <SearchForm onSubmit={searchKeyword}>
+                    <input onChange={handleOnChange} value={keyword}/>
+                </SearchForm>
             </NavBar>
         </>
     )

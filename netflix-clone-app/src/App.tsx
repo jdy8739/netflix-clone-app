@@ -11,7 +11,7 @@ function App() {
       <BrowserRouter>
       <Header />
         <Routes>
-          <Route path="/search?keyword=:name" element={<Search />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/tv" element={<Tv />} />
           <Route path="/*" element={<Home />} />
         </Routes>
