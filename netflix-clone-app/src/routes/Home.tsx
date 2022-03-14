@@ -2,10 +2,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
+import { movieAtom } from "../atoms";
 import Modal from "../components/Modal";
 import SlideBox from "../components/SlideBox";
+import TopRatedSlider from "../components/TopRatedSlider";
+import UpcomingSlider from "../components/UpcomingSlider";
 import { makeImagePath } from "../utils";
 
 const Banner = styled.div<{ path: string }>`
@@ -37,11 +41,11 @@ const Overview = styled.p`
     width: 70%;
 `;
 
-const Slider = styled.div`
+export const Slider = styled.div`
     position: relative;
 `;
 
-const Row = styled(motion.div)`
+export const Row = styled(motion.div)`
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-gap: 10px;
@@ -49,7 +53,7 @@ const Row = styled(motion.div)`
     width: 100vw;
 `;
 
-const Box = styled(motion.div)`
+export const Box = styled(motion.div)`
     height: 150px;
     &:first-child {
         transform-origin: center left;
@@ -141,9 +145,15 @@ function Home() {
         e.stopPropagation();
     };
 
-    const clickedMovie = 
+    const setSelectedMovie = useSetRecoilState(movieAtom);
+
+    const clickedNowPlaying = 
     movieMatch?.params.Id && 
     nowPlaying?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
+
+    if(clickedNowPlaying) {
+        setSelectedMovie(clickedNowPlaying);
+    }
 
     return (
         <>
@@ -157,7 +167,9 @@ function Home() {
                     <button>click</button>
                 </div>
             </Banner>
-            <Slider>
+            <Slider style={{
+                bottom: '150px'
+            }}>
                 <AnimatePresence
                 onExitComplete={() => setLeaving(true)}
                 initial={false}
@@ -179,8 +191,8 @@ function Home() {
                             .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
                             .map((movie, i) => {
                                 return (
-                                    <Box 
-                                    key={i}
+                                    <Box
+                                    key={ i }
                                     variants={boxVariant}
                                     whileHover="hover"
                                     >
@@ -194,6 +206,8 @@ function Home() {
                     </Row>
                 </AnimatePresence>
             </Slider>
+            <TopRatedSlider />
+            <UpcomingSlider />
             {
                 movieMatch === null ? null : 
                 <AnimatePresence>
@@ -208,7 +222,7 @@ function Home() {
                         <ModalWindow 
                         layoutId={movieMatch?.params.Id} 
                         onClick={handleOnClick}>
-                            <Modal clickedMovie={clickedMovie || undefined}/>
+                            <Modal clickedMovie={clickedNowPlaying || undefined}/>
                         </ModalWindow>
                     </ModalBackground>
                 </AnimatePresence>

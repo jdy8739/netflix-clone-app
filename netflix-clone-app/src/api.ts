@@ -36,3 +36,69 @@ export async function fetchNowPlaying() {
     const jsoned = await playingList.json();
     return jsoned;
 };
+
+export interface ITopRatedResult {
+    poster_path: string;
+    adult: boolean;
+    overview: string;
+    release_date: string;
+    genre_ids: number[];
+    id: number;
+    original_title: string;
+    original_language: string;
+    title: string;
+    backdrop_path: string;
+    popularity: number;
+    vote_count: number;
+    video: boolean;
+    vote_average: number;
+};
+
+export interface ITopRated {
+    page: number;
+    results: ITopRatedResult[];
+    total_results: number;
+    total_pages: number;
+};
+
+export async function fetchTopRated() {
+    const latestList = await fetch(`${BASE_URL}/top_rated?api_key=${KEY}&language=en-US&page=1`);
+    const jsoned = await latestList.json();
+    return jsoned;
+};
+
+export interface IUpcomingResult {
+    poster_path: string;
+    adult: boolean;
+    overview: string;
+    release_date: string;
+    genre_ids: number[];
+    id: number;
+    original_title: string;
+    original_language: string;
+    title: string;
+    backdrop_path: string;
+    popularity: number;
+    vote_count: number;
+    video: boolean;
+    vote_average: number;
+};
+
+export interface Dates {
+    maximum: string;
+    minimum: string;
+};
+
+export interface IUpcoming {
+    page: number;
+    results: IUpcomingResult[];
+    dates: Dates;
+    total_pages: number;
+    total_results: number;
+};
+
+export async function fetchUpcoming() {
+    const upcomingList = await fetch(`${BASE_URL}/upcoming?api_key=${KEY}&language=en-US&page=1`);
+    const jsoned = await upcomingList.json();
+    return jsoned;
+};

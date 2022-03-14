@@ -1,5 +1,7 @@
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import { INowPlayingResult } from "../api";
+import { movieAtom } from "../atoms";
 import { makeImagePath } from "../utils";
 
 const ModalInfo = styled.div`
@@ -32,12 +34,16 @@ const Overview = styled.div`
 `;
 
 function Modal({ clickedMovie }: { clickedMovie?: INowPlayingResult }) {
+    //console.log(clickedMovie);
+
+    const selectedMovie = useRecoilValue(movieAtom);
+
     return (
         <ModalInfo>
-            <ModalImage path={makeImagePath(clickedMovie?.backdrop_path || '')}>
-                <Title>{ clickedMovie?.title }</Title>
+            <ModalImage path={makeImagePath(selectedMovie?.backdrop_path || '')}>
+                <Title>{ selectedMovie?.title }</Title>
             </ModalImage>
-            <Overview>{ clickedMovie?.overview }</Overview>
+            <Overview>{ selectedMovie?.overview }</Overview>
         </ModalInfo>
     )
 };
