@@ -8,8 +8,7 @@ import { fetchNowPlaying, INowPlaying } from "../api";
 import { movieAtom } from "../atoms";
 import Modal from "../components/Modal";
 import SlideBox from "../components/SlideBox";
-import TopRatedSlider from "../components/TopRatedSlider";
-import UpcomingSlider from "../components/UpcomingSlider";
+import SliderList from "../components/Slider";
 import { makeImagePath } from "../utils";
 
 const Banner = styled.div<{ path: string }>`
@@ -206,8 +205,8 @@ function Home() {
                     </Row>
                 </AnimatePresence>
             </Slider>
-            <TopRatedSlider />
-            <UpcomingSlider />
+            <SliderList theme={'top_rated'} position={'-150px'}/>
+            <SliderList theme={'upcomings'} position={'-450px'}/>
             {
                 movieMatch === null ? null : 
                 <AnimatePresence>

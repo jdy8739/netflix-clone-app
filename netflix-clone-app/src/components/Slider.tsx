@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useMatch } from "react-router";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { fetchTopRated, fetchUpcoming, ITopRated, IUpcoming } from "../api";
+import { fetchTopRated, fetchUpcoming, ITopRated } from "../api";
 import { movieAtom } from "../atoms";
 import { Box, Row, Slider } from "../routes/Home";
 import SlideBox from "./SlideBox";
@@ -36,7 +36,7 @@ const boxVariant = {
     }
 };
 
-function UpcomingSlider() {
+function SliderList({ theme, position }: { theme?: string, position?: string }) {
 
     const sliderVariant = {
         hidden: { x: window.innerWidth + 10 },
@@ -44,7 +44,19 @@ function UpcomingSlider() {
         exit: { x: -window.innerWidth - 10 }
     };
 
-    const { isLoading, data: upcoming } = useQuery<IUpcoming>(['movie', 'upcoming'], fetchUpcoming);
+    let fetcherFunction: any;
+    switch (theme) {
+        case 'top_rated':
+            fetcherFunction = fetchTopRated;
+            break;
+        case 'upcomings':
+            fetcherFunction = fetchUpcoming;
+            break;
+        default:
+            break;
+    };
+
+    const { isLoading, data } = useQuery<ITopRated>(['movie', theme], fetcherFunction);
 
     const [index, setIndex] = useState(0);
 
@@ -52,8 +64,8 @@ function UpcomingSlider() {
 
     const increaseIndex = () => {
         let NUM_OF_ROW;
-        if(upcoming?.results) {
-            const LEN = upcoming.results.length;
+        if(data?.results) {
+            const LEN = data.results.length;
             NUM_OF_ROW = Math.floor(LEN / NUM_OF_BOX_IN_A_ROW) - 1;
         };
         if(leaving) {
@@ -64,21 +76,21 @@ function UpcomingSlider() {
 
     const movieMatch = useMatch('/movie/:Id');
 
-    const clickedUpcoming = 
+    const clickedTopRated = 
     movieMatch?.params.Id && 
-    upcoming?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
+    data?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
 
     const setSelectedMovie = useSetRecoilState(movieAtom);
 
-    if(clickedUpcoming) {
-        setSelectedMovie(clickedUpcoming);
-    };
+    if(clickedTopRated) {
+        setSelectedMovie(clickedTopRated);
+    }
 
     return (
         <>
             <Slider 
             style={{
-                bottom: '-450px'
+                bottom: position
             }}
             >
                 <NextBtn onClick={increaseIndex}>&larr;</NextBtn>
@@ -98,7 +110,7 @@ function UpcomingSlider() {
                     }}
                     >
                         {
-                            upcoming?.results
+                            data?.results
                             .slice(BOX_OFFSET)
                             .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
                             .map((movie, i) => {
@@ -122,4 +134,4 @@ function UpcomingSlider() {
     )
 };
 
-export default React.memo(UpcomingSlider);
+export default React.memo(SliderList);
