@@ -8,7 +8,7 @@ import { fetchNowPlaying, INowPlaying } from "../api";
 import { movieAtom } from "../atoms";
 import Modal from "../components/Modal";
 import SlideBox from "../components/SlideBox";
-import SliderList from "../components/Slider";
+import SliderList from "../components/SliderList";
 import { makeImagePath } from "../utils";
 
 const Banner = styled.div<{ path: string }>`
