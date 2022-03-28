@@ -10,7 +10,7 @@ import { Box, Row, Slider } from "../routes/Home";
 import SlideBox from "./SlideBox";
 
 const NextBtn = styled.div`
-    width: 30px;
+    width: 50px;
     height: 30px;
     border-radius: 50%;
     position: absolute;
@@ -19,6 +19,10 @@ const NextBtn = styled.div`
     color: white;
     font-weight: bold;
     cursor: pointer;
+`;
+
+const SlideTitle = styled(NextBtn)`
+    left: 30px;
 `;
 
 const BOX_OFFSET = 1;
@@ -92,8 +96,9 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
             style={{
                 bottom: position
             }}
-            >
-                <NextBtn onClick={increaseIndex}>NEXT &rarr;</NextBtn>
+            >   
+                <SlideTitle>{ theme?.toUpperCase() || '' }</SlideTitle>
+                <NextBtn onClick={increaseIndex}>NEXT&rarr;</NextBtn>
                 <AnimatePresence
                 onExitComplete={() => setLeaving(true)}
                 initial={false}
