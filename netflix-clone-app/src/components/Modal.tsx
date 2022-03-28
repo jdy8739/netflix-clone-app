@@ -43,7 +43,12 @@ function Modal({ clickedMovie }: { clickedMovie?: INowPlayingResult }) {
             <ModalImage path={makeImagePath(selectedMovie?.backdrop_path || '')}>
                 <Title>{ selectedMovie?.title }</Title>
             </ModalImage>
-            <Overview>{ selectedMovie?.overview }</Overview>
+            <Overview>
+                { 
+                    selectedMovie?.overview && selectedMovie?.overview?.length > 400 ? 
+                    selectedMovie?.overview.slice(0, 420) + '...' : selectedMovie?.overview
+                }
+            </Overview>
         </ModalInfo>
     )
 };

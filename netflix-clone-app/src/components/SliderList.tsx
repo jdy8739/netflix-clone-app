@@ -14,10 +14,10 @@ const NextBtn = styled.div`
     height: 30px;
     border-radius: 50%;
     position: absolute;
-    top: -60px;
+    top: -50px;
     right: 30px;
-    background-color: red;
-    color: red;
+    color: white;
+    font-weight: bold;
     cursor: pointer;
 `;
 
@@ -93,7 +93,7 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
                 bottom: position
             }}
             >
-                <NextBtn onClick={increaseIndex}>&larr;</NextBtn>
+                <NextBtn onClick={increaseIndex}>NEXT &rarr;</NextBtn>
                 <AnimatePresence
                 onExitComplete={() => setLeaving(true)}
                 initial={false}

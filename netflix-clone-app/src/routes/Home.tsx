@@ -83,6 +83,21 @@ const ModalWindow = styled(motion.div)`
     overflow: hidden;
 `;
 
+const Footer = styled.div<{ path: string }>`
+    background-color: #5f5c5c;
+    position: relative;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)), 
+        url(${ props => props.path });
+    background-position: center center;
+    background-size: cover;
+    opacity: 0.1;
+    z-index: -1;
+`;
+
 const modalVariant = {
     hidden: {
         opacity: 0
@@ -140,9 +155,7 @@ function Home() {
 
     const nav = useNavigate();
 
-    const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation();
-    };
+    const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
     const setSelectedMovie = useSetRecoilState(movieAtom);
 
@@ -226,6 +239,11 @@ function Home() {
                     </ModalBackground>
                 </AnimatePresence>
             }
+            <Footer 
+            path={
+                makeImagePath(
+                    nowPlaying?.results[1].backdrop_path || '')} 
+            />
         </>
     )
 };
