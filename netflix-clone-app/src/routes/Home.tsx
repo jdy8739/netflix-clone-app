@@ -5,13 +5,13 @@ import { useMatch, useNavigate } from "react-router";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
-import { movieAtom } from "../atoms";
+import { bannerAtom, movieAtom } from "../atoms";
 import Modal from "../components/Modal";
 import SlideBox from "../components/SlideBox";
 import SliderList from "../components/SliderList";
 import { makeImagePath } from "../utils";
 
-const Banner = styled.div<{ path: string }>`
+export const Banner = styled.div<{ path: string }>`
     width: 100vw;
     height: 100vh;
     background-color: black;
@@ -28,13 +28,13 @@ const Banner = styled.div<{ path: string }>`
     background-size: cover;
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
     color: white;
     font-size: 120px;
     margin: 0;
 `;
 
-const Overview = styled.p`
+export const Overview = styled.p`
     font-size: 20px;
     margin: 0;
     width: 70%;
@@ -130,26 +130,9 @@ function Home() {
         exit: { x: -window.innerWidth - 10 }
     };
 
-    const { 
-        isLoading: nowPlayingLoading, 
-        data: nowPlaying } 
-        = useQuery<INowPlaying>(['movies', 'now_playing'], fetchNowPlaying);
-
     const [index, setIndex] = useState(0);
 
     const [leaving, setLeaving] = useState(true);
-
-    const increaseIndex = () => {
-        let NUM_OF_ROW;
-        if(nowPlaying?.results) {
-            const LEN = nowPlaying.results.length;
-            NUM_OF_ROW = Math.floor(LEN / NUM_OF_BOX_IN_A_ROW) - 1;
-        };
-        if(leaving) {
-            setIndex(index === NUM_OF_ROW ? 0 : index + 1)
-            setLeaving(false);
-        } else return;
-    };
 
     const movieMatch = useMatch('/movie/:theme/:id');
 
@@ -157,16 +140,15 @@ function Home() {
 
     const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
-    const clickedMovie = useRecoilValue(movieAtom);
+    const banner = useRecoilValue(bannerAtom);
 
     return (
         <>
             <Banner 
-            onClick={increaseIndex}
-            path={makeImagePath(nowPlaying?.results[0].backdrop_path || '')}>
+            path={makeImagePath(banner ? banner.backdrop_path : '')}>
                 <div>
-                    <Title>{ nowPlaying?.results[0].title }</Title>
-                    <Overview>{ nowPlaying?.results[0].overview }</Overview>
+                    <Title>{ banner ? banner.title : '' }</Title>
+                    <Overview>{ banner ? banner.overview : '' }</Overview>
                     <br></br>
                     <button>click</button>
                 </div>
@@ -188,7 +170,7 @@ function Home() {
                         <ModalWindow 
                         layoutId={movieMatch?.params.theme ? movieMatch?.params.theme + movieMatch?.params.id : ''}
                         onClick={handleOnClick}>
-                            <Modal clickedMovie={clickedMovie || undefined}/>
+                            <Modal />
                         </ModalWindow>
                     </ModalBackground>
                 </AnimatePresence>
@@ -196,7 +178,7 @@ function Home() {
             <Footer 
             path={
                 makeImagePath(
-                    nowPlaying?.results[1].backdrop_path || '')} 
+                    banner ? banner.backdrop_path : '')} 
             />
         </>
     )

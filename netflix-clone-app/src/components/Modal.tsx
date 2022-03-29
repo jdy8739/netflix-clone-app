@@ -33,8 +33,7 @@ const Overview = styled.div`
     padding: 12px;
 `;
 
-function Modal({ clickedMovie }: { clickedMovie?: INowPlayingResult }) {
-    //console.log(clickedMovie);
+function Modal() {
 
     const selectedMovie = useRecoilValue(movieAtom);
 

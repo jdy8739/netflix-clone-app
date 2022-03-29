@@ -4,10 +4,11 @@ import { useQuery } from "react-query";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchNowPlaying, fetchTopRated, fetchUpcoming, ITopRated } from "../api";
-import { bannerAtom, movieAtom } from "../atoms";
+import { bannerAtom, movieAtom, tvBannerAtom } from "../atoms";
 import { Box, Row, Slider } from "../routes/Home";
-import { fetchTvPopular } from "../tvApi";
+import { fetchTvPopular, ITvPopular, ITvPopularResult } from "../tvApi";
 import SlideBox from "./SlideBox";
+import SlideBoxTv from "./SlideBoxTv";
 
 const NextBtn = styled.div`
     width: 50px;
@@ -40,7 +41,7 @@ const boxVariant = {
     }
 };
 
-function SliderList({ theme, position }: { theme?: string, position?: string }) {
+function SliderListTv({ theme, position }: { theme?: string, position?: string }) {
 
     const sliderVariant = {
         hidden: { x: window.innerWidth + 10 },
@@ -50,26 +51,20 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
 
     let fetcherFunction: any;
     switch (theme) {
-        case 'now_playing':
-            fetcherFunction = fetchNowPlaying;
-            break;
-        case 'top_rated':
-            fetcherFunction = fetchTopRated;
-            break;
-        case 'upcomings':
-            fetcherFunction = fetchUpcoming;
+        case 'tv_popular':
+            fetcherFunction = fetchTvPopular;
             break;
         default:
             break;
     };
 
-    const { isLoading, data } = useQuery<ITopRated>(['movie', theme], fetcherFunction);
+    const { isLoading, data } = useQuery<ITvPopular>(['tv', theme], fetcherFunction);
 
-    const setBannerAtom = useSetRecoilState(bannerAtom);
+    const setTvBannerAtom = useSetRecoilState(tvBannerAtom);
 
-    if(theme === 'now_playing' || theme === 'tv_popular') {
+    if(theme === 'tv_popular') {
         if(data?.results) {
-            setBannerAtom(data?.results[0]);
+            setTvBannerAtom(data.results[0]);
         };
     };
 
@@ -93,7 +88,7 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
 
     const findClickedMovie = (id: number) => {
         const clickedMovie = data?.results.find(movie => movie.id === id);
-        if(clickedMovie) setClickedMovie(clickedMovie);
+        //if(clickedMovie) setClickedMovie(clickedMovie);
     };
 
     return (
@@ -124,17 +119,17 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
                             data?.results
                             .slice(BOX_OFFSET)
                             .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
-                            .map((movie, i) => {
+                            .map((tv, i) => {
                                 return (
                                     <Box
                                     key={ i }
                                     variants={boxVariant}
                                     whileHover="hover"
-                                    onClick={() => findClickedMovie(movie.id)}
+                                    onClick={() => findClickedMovie(tv.id)}
                                     >
-                                        <SlideBox 
+                                        <SlideBoxTv 
                                         theme={ theme ?? '' }
-                                        movieInfo={ movie }
+                                        tvInfo={ tv }
                                         />
                                     </Box>
                                 )
@@ -147,4 +142,4 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
     )
 };
 
-export default React.memo(SliderList);
+export default React.memo(SliderListTv);
