@@ -81,10 +81,11 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
         } else return;
     };
 
-    const movieMatch = useMatch('/movie/:theme/:id');
+    const setClickedMovie = useSetRecoilState(movieAtom);
 
-    const findClickedMovie = () => {
-        console.log(movieMatch);
+    const findClickedMovie = (id: number) => {
+        const clickedMovie = data?.results.find(movie => movie.id === id);
+        if(clickedMovie) setClickedMovie(clickedMovie);
     };
 
     return (
@@ -93,7 +94,6 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
             style={{
                 bottom: position
             }}
-            onClick={findClickedMovie}
             >   
                 <SlideTitle>{ theme?.toUpperCase() || '' }</SlideTitle>
                 <NextBtn onClick={increaseIndex}>NEXT&rarr;</NextBtn>
@@ -122,6 +122,7 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
                                     key={ i }
                                     variants={boxVariant}
                                     whileHover="hover"
+                                    onClick={() => findClickedMovie(movie.id)}
                                     >
                                         <SlideBox 
                                         theme={ theme ?? '' }

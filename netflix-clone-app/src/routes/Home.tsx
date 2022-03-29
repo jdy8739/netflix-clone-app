@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { useMatch, useNavigate } from "react-router";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
 import { movieAtom } from "../atoms";
@@ -157,15 +157,7 @@ function Home() {
 
     const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
-    const setSelectedMovie = useSetRecoilState(movieAtom);
-
-    const clickedMovie = 
-    movieMatch?.params.id && 
-    nowPlaying?.results.find(movie => movie.id === Number(movieMatch?.params?.id));
-
-    if(clickedMovie) {
-        setSelectedMovie(clickedMovie);
-    };
+    const clickedMovie = useRecoilValue(movieAtom);
 
     return (
         <>
