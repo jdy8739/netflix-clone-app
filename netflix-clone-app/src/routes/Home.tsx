@@ -151,7 +151,7 @@ function Home() {
         } else return;
     };
 
-    const movieMatch = useMatch('/movie/:Id');
+    const movieMatch = useMatch('/movie/:theme/:id');
 
     const nav = useNavigate();
 
@@ -159,13 +159,13 @@ function Home() {
 
     const setSelectedMovie = useSetRecoilState(movieAtom);
 
-    const clickedNowPlaying = 
-    movieMatch?.params.Id && 
-    nowPlaying?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
+    const clickedMovie = 
+    movieMatch?.params.id && 
+    nowPlaying?.results.find(movie => movie.id === Number(movieMatch?.params?.id));
 
-    if(clickedNowPlaying) {
-        setSelectedMovie(clickedNowPlaying);
-    }
+    if(clickedMovie) {
+        setSelectedMovie(clickedMovie);
+    };
 
     return (
         <>
@@ -179,52 +179,14 @@ function Home() {
                     <button>click</button>
                 </div>
             </Banner>
-            <Slider style={{
-                bottom: '150px'
-            }}>
-                <AnimatePresence
-                onExitComplete={() => setLeaving(true)}
-                initial={false}
-                >
-                    <Row
-                    key={index}
-                    variants={sliderVariant}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ 
-                        type: "linear", 
-                        duration: 1 
-                    }}
-                    >
-                        {
-                            nowPlaying?.results
-                            .slice(BOX_OFFSET)
-                            .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
-                            .map((movie, i) => {
-                                return (
-                                    <Box
-                                    key={ i }
-                                    variants={boxVariant}
-                                    whileHover="hover"
-                                    >
-                                        <SlideBox 
-                                        movieInfo={ movie }
-                                        />
-                                    </Box>
-                                )
-                            })
-                        }
-                    </Row>
-                </AnimatePresence>
-            </Slider>
+            <SliderList theme={'now_playing'} position={'150px'}/>
             <SliderList theme={'top_rated'} position={'-150px'}/>
             <SliderList theme={'upcomings'} position={'-450px'}/>
             {
                 movieMatch === null ? null : 
                 <AnimatePresence>
                     <ModalBackground
-                    key={movieMatch.params.Id}
+                    key={movieMatch.params.id}
                     variants={modalVariant}
                     initial="hidden"
                     animate="visible"
@@ -232,9 +194,9 @@ function Home() {
                     onClick={() => nav('/')}
                     >
                         <ModalWindow 
-                        layoutId={movieMatch?.params.Id} 
+                        layoutId={movieMatch?.params.theme ? movieMatch?.params.theme + movieMatch?.params.id : ''}
                         onClick={handleOnClick}>
-                            <Modal clickedMovie={clickedNowPlaying || undefined}/>
+                            <Modal clickedMovie={clickedMovie || undefined}/>
                         </ModalWindow>
                     </ModalBackground>
                 </AnimatePresence>

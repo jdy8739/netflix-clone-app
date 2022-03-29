@@ -38,14 +38,14 @@ const infoVariant = {
 };
 
 
-function SlideBox({ movieInfo }: { movieInfo?: INowPlayingResult }) {
+function SlideBox({ movieInfo, theme }: { movieInfo?: INowPlayingResult, theme: string }) {
 
     const nav = useNavigate();
 
     return (
         <BoxElem
-        onClick={() => nav(`/movie/${movieInfo?.id}`)}
-        layoutId={movieInfo?.id + ''}
+        onClick={() => nav(`/movie/${theme}/${movieInfo?.id}`)}
+        layoutId={theme + movieInfo?.id}
         >
             <Thumbnail 
             src={makeImagePath(movieInfo?.backdrop_path || '', 'w500')}

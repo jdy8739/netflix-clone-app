@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useMatch } from "react-router";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { fetchTopRated, fetchUpcoming, ITopRated } from "../api";
+import { fetchNowPlaying, fetchTopRated, fetchUpcoming, ITopRated } from "../api";
 import { movieAtom } from "../atoms";
 import { Box, Row, Slider } from "../routes/Home";
 import SlideBox from "./SlideBox";
@@ -50,6 +50,9 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
 
     let fetcherFunction: any;
     switch (theme) {
+        case 'now_playing':
+            fetcherFunction = fetchNowPlaying;
+            break;
         case 'top_rated':
             fetcherFunction = fetchTopRated;
             break;
@@ -70,32 +73,27 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
         let NUM_OF_ROW;
         if(data?.results) {
             const LEN = data.results.length;
-            NUM_OF_ROW = Math.floor(LEN / NUM_OF_BOX_IN_A_ROW) - 1;
+            NUM_OF_ROW = Math.floor(LEN / NUM_OF_BOX_IN_A_ROW) - BOX_OFFSET;
         };
         if(leaving) {
-            setIndex(index === NUM_OF_ROW ? 0 : index + 1)
+            setIndex(index === NUM_OF_ROW ? 0 : index + BOX_OFFSET)
             setLeaving(false);
         } else return;
     };
 
-    const movieMatch = useMatch('/movie/:Id');
+    const movieMatch = useMatch('/movie/:theme/:id');
 
-    const clickedTopRated = 
-    movieMatch?.params.Id && 
-    data?.results.find(movie => movie.id === Number(movieMatch?.params?.Id));
-
-    const setSelectedMovie = useSetRecoilState(movieAtom);
-
-    if(clickedTopRated) {
-        setSelectedMovie(clickedTopRated);
-    }
+    const findClickedMovie = () => {
+        console.log(movieMatch);
+    };
 
     return (
         <>
-            <Slider 
+            <Slider
             style={{
                 bottom: position
             }}
+            onClick={findClickedMovie}
             >   
                 <SlideTitle>{ theme?.toUpperCase() || '' }</SlideTitle>
                 <NextBtn onClick={increaseIndex}>NEXT&rarr;</NextBtn>
@@ -126,6 +124,7 @@ function SliderList({ theme, position }: { theme?: string, position?: string }) 
                                     whileHover="hover"
                                     >
                                         <SlideBox 
+                                        theme={ theme ?? '' }
                                         movieInfo={ movie }
                                         />
                                     </Box>
