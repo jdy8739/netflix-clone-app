@@ -12,6 +12,11 @@ export const bannerAtom = atom<INowPlayingResult | null>({
     default: null
 });
 
+export const tvAtom = atom<ITvPopularResult | null>({
+    key: 'tvAtom',
+    default: null
+});
+
 export const tvBannerAtom = atom<ITvPopularResult | null>({
     key: 'tvBannerAtom',
     default: null

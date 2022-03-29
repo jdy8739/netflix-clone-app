@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import { fetchNowPlaying, fetchTopRated, fetchUpcoming, ITopRated } from "../api";
-import { bannerAtom, movieAtom, tvBannerAtom } from "../atoms";
+import { bannerAtom, movieAtom, tvAtom, tvBannerAtom } from "../atoms";
 import { Box, Row, Slider } from "../routes/Home";
 import { fetchTvPopular, ITvPopular, ITvPopularResult } from "../tvApi";
 import SlideBox from "./SlideBox";
@@ -84,11 +84,11 @@ function SliderListTv({ theme, position }: { theme?: string, position?: string }
         } else return;
     };
 
-    const setClickedMovie = useSetRecoilState(movieAtom);
+    const setClickedMovie = useSetRecoilState(tvAtom);
 
     const findClickedMovie = (id: number) => {
-        const clickedMovie = data?.results.find(movie => movie.id === id);
-        //if(clickedMovie) setClickedMovie(clickedMovie);
+        const clickedTv = data?.results.find(tv => tv.id === id);
+        if(clickedTv) setClickedMovie(clickedTv);
     };
 
     return (

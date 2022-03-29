@@ -62,7 +62,7 @@ export const Box = styled(motion.div)`
     }
 `;
 
-const ModalBackground = styled(motion.div)`
+export const ModalBackground = styled(motion.div)`
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
@@ -70,7 +70,7 @@ const ModalBackground = styled(motion.div)`
     top: 0;
 `;
 
-const ModalWindow = styled(motion.div)`
+export const ModalWindow = styled(motion.div)`
     background-color: white;
     width: 620px;
     height: 560px;
@@ -83,7 +83,7 @@ const ModalWindow = styled(motion.div)`
     overflow: hidden;
 `;
 
-const Footer = styled.div<{ path: string }>`
+export const Footer = styled.div<{ path: string }>`
     background-color: #5f5c5c;
     position: relative;
     bottom: 0;
@@ -98,7 +98,7 @@ const Footer = styled.div<{ path: string }>`
     z-index: -1;
 `;
 
-const modalVariant = {
+export const modalVariant = {
     hidden: {
         opacity: 0
     },
@@ -107,7 +107,7 @@ const modalVariant = {
     }
 };
 
-const boxVariant = {
+export const boxVariant = {
     hover: {
         scale: 1.4,
         y: -125,
@@ -134,13 +134,17 @@ function Home() {
 
     const [leaving, setLeaving] = useState(true);
 
-    const movieMatch = useMatch('/movie/:theme/:id');
+    let movieMatch = useMatch('/movie/:theme/:id');
 
     const nav = useNavigate();
 
     const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
     const banner = useRecoilValue(bannerAtom);
+
+    const movieAtomValue = useRecoilValue(movieAtom);
+
+    if(!movieAtomValue) movieMatch = null;
 
     return (
         <>
