@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { fetchNowPlaying, fetchTopRated, fetchUpcoming, ITopRated } from "../api";
 import { bannerAtom, movieAtom, tvAtom, tvBannerAtom } from "../atoms";
 import { Box, Row, Slider } from "../routes/Home";
-import { fetchTvPopular, ITvPopular, ITvPopularResult } from "../tvApi";
+import { fetchAiringToday, fetchTvLatest, fetchTvPopular, ITvPopular, ITvPopularResult } from "../tvApi";
 import SlideBox from "./SlideBox";
 import SlideBoxTv from "./SlideBoxTv";
 
@@ -54,6 +54,12 @@ function SliderListTv({ theme, position }: { theme?: string, position?: string }
         case 'tv_popular':
             fetcherFunction = fetchTvPopular;
             break;
+        case 'airing_today':
+            fetcherFunction = fetchAiringToday;
+            break;
+        case 'tv_top_rated':
+            fetcherFunction = fetchTvLatest;
+            break;
         default:
             break;
     };
@@ -86,7 +92,7 @@ function SliderListTv({ theme, position }: { theme?: string, position?: string }
 
     const setClickedMovie = useSetRecoilState(tvAtom);
 
-    const findClickedMovie = (id: number) => {
+    const findClickedTv = (id: number) => {
         const clickedTv = data?.results.find(tv => tv.id === id);
         if(clickedTv) setClickedMovie(clickedTv);
     };
@@ -125,7 +131,7 @@ function SliderListTv({ theme, position }: { theme?: string, position?: string }
                                     key={ i }
                                     variants={boxVariant}
                                     whileHover="hover"
-                                    onClick={() => findClickedMovie(tv.id)}
+                                    onClick={() => findClickedTv(tv.id)}
                                     >
                                         <SlideBoxTv 
                                         theme={ theme ?? '' }

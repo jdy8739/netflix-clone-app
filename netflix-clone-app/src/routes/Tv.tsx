@@ -35,6 +35,8 @@ function Tv() {
                     </div>
             </Banner>
             <SliderListTv theme={'tv_popular'} position={'150px'}/>
+            <SliderListTv theme={'airing_today'} position={'-150px'}/>
+            <SliderListTv theme={'tv_top_rated'} position={'-450px'}/>
             {
                 tvMatch === null ? null : 
                 <AnimatePresence>

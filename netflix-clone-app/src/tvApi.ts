@@ -29,3 +29,15 @@ export async function fetchTvPopular() {
     const jsoned = await tvPopular.json();
     return jsoned;
 };
+
+export async function fetchAiringToday() {
+    const tvPopular = await fetch(`${BASE_URL}/airing_today?api_key=${KEY}&language=en-US&page=1`);
+    const jsoned = await tvPopular.json();
+    return jsoned;
+};
+
+export async function fetchTvLatest() {
+    const tvPopular = await fetch(`${BASE_URL}/top_rated?api_key=${KEY}&language=en-US&page=1`);
+    const jsoned = await tvPopular.json();
+    return jsoned;
+};
