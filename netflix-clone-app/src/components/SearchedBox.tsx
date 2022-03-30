@@ -16,7 +16,7 @@ const SearchedTitle = styled.p`
     left: 12px;
     right: 0;
     margin: auto;
-    width: 200px;
+    width: 220px;
 `;
 
 const Box = styled.span`
@@ -60,10 +60,12 @@ function SearchedBox({ searched }: { searched: ISearchedResult }) {
             path={
                 searched.backdrop_path ?
                 makeImagePath(String(searched.backdrop_path), 'w500') :
-                makeImagePath(String(searched.poster_path))
+                searched.poster_path ?
+                makeImagePath(String(searched.poster_path)) :
+                makeImagePath(String(searched.profile_path))
             }>
                 {
-                    searched.backdrop_path || searched.poster_path ?
+                    searched.backdrop_path || searched.poster_path || searched.profile_path ?
                     null : <NoImage>No image available</NoImage>
                 }
             </SearchedImg>

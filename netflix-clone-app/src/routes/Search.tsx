@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useQuery } from "react-query";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import SearchedBox from "../components/SearchedBox";
 import { fetchSearched, ISearched } from "../searchApi";
@@ -50,6 +51,14 @@ function Search() {
 
     const {isLoading, data} = useQuery<ISearched>(['searched', keyword], () => fetchSearched(keyword || ''));
     console.log(data);
+
+    const [isModalShown, setIsModalShown] = useState(false);
+
+    const showModal = (id: number) => {
+        alert(id);
+        setIsModalShown(true);
+    };
+    
     return (
         <>
             {
@@ -71,6 +80,7 @@ function Search() {
                                             <SearchResBox 
                                             key={ i } 
                                             bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
+                                            onClick={() => showModal(res.id)}
                                             >
                                                 <SearchedBox searched={res}/>
                                             </SearchResBox>
