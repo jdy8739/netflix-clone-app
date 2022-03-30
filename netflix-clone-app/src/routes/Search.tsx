@@ -14,6 +14,21 @@ const Alert = styled.p`
     text-align: center;
 `;
 
+const SearchResBox = styled.div<{ bigSize?: boolean }>`
+    width: ${ props => props.bigSize ? '61%' : '35%' };
+    height: 175px;
+    background-color: #363636;
+    margin: 10px;
+    border-radius: 12px;
+    display: inline-block;
+    @media screen and (max-width: 1500px) {
+        width: ${ props => props.bigSize ? '61%' : '33%' };
+    }
+    @media screen and (max-width: 600px) {
+        width: 100%;
+    }
+`;
+
 function Search() {
 
     const location = useLocation();
@@ -30,9 +45,24 @@ function Search() {
                     {
                         data?.results.length === 0 ? 
                         <Alert>Sorry. No Searched Result :(</Alert> : 
-                        <>
+                        <div style={{
+                            width: '70%',
+                            minWidth: '768px',
+                            margin: '200px auto'
+                        }}>
+                            {
+                                data?.results.map((res, i) => {
+                                    return (
+                                        <SearchResBox 
+                                        key={ i } 
+                                        bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
+                                        >
 
-                        </>
+                                        </SearchResBox>
+                                    )
+                                })
+                            }
+                        </div>
                     }
                 </>
             }
