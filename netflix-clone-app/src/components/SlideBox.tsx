@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { INowPlayingResult } from "../api";
 import { makeImagePath } from "../utils";
 
-const BoxElem = styled(motion.div)`
+export const BoxElem = styled(motion.div)`
     background-position: center center;
     background-size: cover;
     width: 100%;
@@ -14,7 +14,7 @@ const BoxElem = styled(motion.div)`
     color: white;
 `;
 
-const Info = styled(motion.div)`
+export const Info = styled(motion.div)`
     background-color: rgb(34, 34, 36);
     width: 100%;
     height: 45px;
@@ -23,9 +23,10 @@ const Info = styled(motion.div)`
     align-items: center;
     text-align: center;
     opacity: 0;
+    transition: opacity 1.5s;
 `;
 
-const Thumbnail = styled.img`
+export const Thumbnail = styled.img`
     width: 100%;
     height: 100%;
     margin-bottom: -5px;

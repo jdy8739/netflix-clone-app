@@ -123,7 +123,7 @@ function SliderListTv({ theme, position }: { theme?: string, position?: string }
                     >
                         {
                             data?.results
-                            .slice(BOX_OFFSET)
+                            .slice(theme !== 'tv_top_rated' ? BOX_OFFSET : 0)
                             .slice(index * NUM_OF_BOX_IN_A_ROW, index * NUM_OF_BOX_IN_A_ROW + NUM_OF_BOX_IN_A_ROW)
                             .map((tv, i) => {
                                 return (
