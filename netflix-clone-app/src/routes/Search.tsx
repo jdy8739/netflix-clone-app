@@ -18,7 +18,9 @@ const Alert = styled.p`
 const SearchResBox = styled.div<{ bigSize?: boolean }>`
     width: ${ props => props.bigSize ? '61%' : '35%' };
     height: 175px;
+    background-color: #363636;
     margin: 10px;
+    border-radius: 12px;
     display: inline-block;
     @media screen and (max-width: 1500px) {
         width: ${ props => props.bigSize ? '61%' : '33%' };
@@ -55,14 +57,14 @@ function Search() {
                 <>
                     {
                         data?.results.length === 0 ? 
-                        <Alert>Sorry. No Searched Result :(</Alert> : 
+                        <Alert>Sorry. No Searched Result :(</Alert> :
                         <>
                             <Result>Results for "<Keyword>{ keyword }</Keyword>"</Result>
                             <div style={{
-                            width: '70%',
-                            minWidth: '768px',
-                            margin: '30px auto'
-                        }}>
+                                width: '70%',
+                                minWidth: '768px',
+                                margin: '30px auto'
+                            }}>
                                 {
                                     data?.results.map((res, i) => {
                                         return (
@@ -70,9 +72,7 @@ function Search() {
                                             key={ i } 
                                             bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
                                             >
-                                                <SearchedBox
-                                                searched={res}
-                                                />
+                                                <SearchedBox searched={res}/>
                                             </SearchResBox>
                                         )
                                     })

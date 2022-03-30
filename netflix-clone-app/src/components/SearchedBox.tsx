@@ -16,6 +16,7 @@ const SearchedTitle = styled.p`
     left: 12px;
     right: 0;
     margin: auto;
+    width: 200px;
 `;
 
 const Box = styled.span`
