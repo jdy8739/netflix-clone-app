@@ -13,7 +13,7 @@ export const PlayBtn = styled.img`
     left: 0;
     right: 0;
     margin: auto;
-    transition: opacity 0.5;
+    transition: all 0.5;
 `;
 
 export const ModalInfo = styled.div`

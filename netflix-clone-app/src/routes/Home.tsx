@@ -97,7 +97,7 @@ export const Footer = styled.div<{ path: string }>`
     background-position: center center;
     background-size: cover;
     opacity: 0.1;
-    z-index: 1;
+    z-index: -1;
 `;
 
 export const PlayBtn = styled.button`
