@@ -26,6 +26,9 @@ export const Banner = styled.div<{ path: string }>`
         url(${ props => props.path });
     background-position: center center;
     background-size: cover;
+    @media screen and (max-width: 1200px) {
+        min-height: 950px;
+    }
     @media screen and (max-width: 800px) {
         min-height: 1100px;
     }

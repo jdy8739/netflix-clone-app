@@ -19,7 +19,7 @@ function SearchModal({ clicked }: { clicked: ISearchedResult }) {
                 <ModalImage 
                 path={
                     clicked.backdrop_path ?
-                    makeImagePath(String(clicked.backdrop_path), 'w500') :
+                    makeImagePath(String(clicked.backdrop_path)) :
                     clicked.poster_path ?
                     makeImagePath(String(clicked.poster_path)) :
                     makeImagePath(String(clicked.profile_path))
@@ -50,7 +50,7 @@ function SearchModal({ clicked }: { clicked: ISearchedResult }) {
                 }
                 {
                     clicked.release_date || clicked.first_air_date ? 
-                    <ReleaseDate>first aired: { clicked?.release_date ||clicked?.first_air_date }</ReleaseDate> : null
+                    <ReleaseDate>first aired: { clicked?.release_date || clicked?.first_air_date }</ReleaseDate> : null
                 }
                 <Overview>
                     { 

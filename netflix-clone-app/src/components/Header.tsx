@@ -29,8 +29,29 @@ const Nav = styled.div`
     position: relative;
 `;
 
-const SearchForm = styled.form`
+const SearchForm = styled(motion.form)`
     padding: 24px;
+    display: flex;
+`;
+
+const Input = styled(motion.input)`
+    transform-origin: right center;
+    position: absolute;
+    right: 0px;
+    margin-right: 80px;
+    margin-top: -15px;
+    padding: 5px 10px;
+    padding-left: 40px;
+    z-index: -1;
+    color: white;
+    font-size: 16px;
+    background-color: transparent;
+    border: 1px solid white;
+`;
+
+const SearchIcon = styled(motion.img)`
+    width: 25px;
+    height: 20px;
 `;
 
 const RouteBall = styled(motion.div)`
@@ -60,18 +81,10 @@ const svgVariant = {
     }
 };
 
-const navVariants = {
-    top: {
-      backgroundColor: "rgba(0, 0, 0, 0)",
-    },
-    scroll: {
-      backgroundColor: "rgba(0, 0, 0, 1)",
-    }
-};
-
 function Header() {
 
     const homeMatch = useMatch('/');
+
     const tvMatch = useMatch('/tv');
 
     const { scrollY } = useViewportScroll();
@@ -104,13 +117,39 @@ function Header() {
 
     const handleOnChange = (e: React.FormEvent<HTMLInputElement>) => setKeyword(e.currentTarget.value);
 
+    const inputAnimation = useAnimation();
+
+    const iconAimation = useAnimation();
+
+    const [searchOpen, setSearchOpen] = useState(false);
+
+    const toggleSearch = () => {
+        if (searchOpen) {
+            inputAnimation.start({
+                scaleX: 0,
+            });
+            iconAimation.start({
+                x: 0,
+                transition: {
+                    type: 'linear'
+                }
+            });
+        } else {
+            inputAnimation.start({ scaleX: 1 });
+            iconAimation.start({
+                x: -250,
+                transition: {
+                    type: 'linear'
+                }
+            });
+        }
+        setSearchOpen((prev) => !prev);
+    };
+
     return (
         <>
             <NavBar
             style={{ backgroundColor: gradient }}
-            // variants={navVariants}
-            // initial="top"
-            // animate={navAnimation}
             >
                 <Logo
                 xmlns="http://www.w3.org/2000/svg"
@@ -144,8 +183,22 @@ function Header() {
                     }
                 </Nav>
                 <div style={{ flexGrow: 1 }}></div>
-                <SearchForm onSubmit={searchKeyword}>
-                    <input onChange={handleOnChange} value={keyword}/>
+                <SearchIcon 
+                src={require('../img/search_icon.png')}
+                onClick={toggleSearch}
+                animate={iconAimation}
+                />
+                <SearchForm 
+                onSubmit={searchKeyword}
+                animate={inputAnimation}
+                initial={{ scaleX: 0 }}
+                transition={{ type: "linear" }}
+                >
+                    <Input 
+                    onChange={handleOnChange} 
+                    value={keyword}
+                    placeholder="Search for movie or tv show..."
+                    />
                 </SearchForm>
             </NavBar>
         </>
