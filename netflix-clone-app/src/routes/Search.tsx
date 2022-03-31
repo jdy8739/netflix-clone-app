@@ -55,8 +55,7 @@ function Search() {
     const keyword = new URLSearchParams(location.search).get('keyword');
 
     const {isLoading, data} = useQuery<ISearched>(['searched', keyword], () => fetchSearched(keyword || ''));
-    console.log(data);
-
+    
     const [clicked, setClicked] = useState<ISearchedResult | null>();
 
     const showModal = (id: number) => {

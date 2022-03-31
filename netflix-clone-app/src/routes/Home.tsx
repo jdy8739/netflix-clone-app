@@ -13,6 +13,7 @@ import { makeImagePath } from "../utils";
 export const Banner = styled.div<{ path: string }>`
     width: 100vw;
     height: 100vh;
+    min-height: 800px;
     background-color: black;
     display: flex;
     justify-content: flex-start;
@@ -25,6 +26,9 @@ export const Banner = styled.div<{ path: string }>`
         url(${ props => props.path });
     background-position: center center;
     background-size: cover;
+    @media screen and (max-width: 800px) {
+        min-height: 1100px;
+    }
 `;
 
 export const Title = styled.h1`
@@ -83,7 +87,6 @@ export const ModalWindow = styled(motion.div)`
 `;
 
 export const Footer = styled.div<{ path: string }>`
-    background-color: #5f5c5c;
     position: relative;
     bottom: 0;
     width: 100vw;
@@ -94,7 +97,21 @@ export const Footer = styled.div<{ path: string }>`
     background-position: center center;
     background-size: cover;
     opacity: 0.1;
-    z-index: -1;
+    z-index: 1;
+`;
+
+export const PlayBtn = styled.button`
+    background-color: transparent;
+    border: 2px solid white;
+    border-radius: 4px;
+    padding: 6px 12px;
+    color: white;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 1s;
+    &:hover {
+        opacity: 1;
+    }
 `;
 
 export const modalVariant = {
@@ -147,7 +164,7 @@ function Home() {
                     <Title>{ banner ? banner.title : '' }</Title>
                     <Overview>{ banner ? banner.overview : '' }</Overview>
                     <br></br>
-                    <button>click</button>
+                    <PlayBtn>watch</PlayBtn>
                 </div>
             </Banner>
             <SliderList theme={'now_playing'} position={'150px'}/>

@@ -7,7 +7,7 @@ import Modal from "../components/Modal";
 import ModalTv from "../components/ModalTv";
 import SliderListTv from "../components/SliderListTv";
 import { makeImagePath } from "../utils";
-import { Banner, Footer, ModalBackground, modalVariant, ModalWindow, Overview, Title } from "./Home";
+import { Banner, Footer, ModalBackground, modalVariant, ModalWindow, Overview, PlayBtn, Title } from "./Home";
 
 function Tv() {
 
@@ -31,7 +31,7 @@ function Tv() {
                         <Title>{ banner ? banner.name : '' }</Title>
                         <Overview>{ banner ? banner.overview : '' }</Overview>
                         <br></br>
-                        <button>click</button>
+                        <PlayBtn>watch</PlayBtn>
                     </div>
             </Banner>
             <SliderListTv theme={'tv_popular'} position={'150px'}/>
