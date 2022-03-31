@@ -7,7 +7,6 @@ import styled from "styled-components";
 import { fetchNowPlaying, INowPlaying } from "../api";
 import { bannerAtom, movieAtom } from "../atoms";
 import Modal from "../components/Modal";
-import SlideBox from "../components/SlideBox";
 import SliderList from "../components/SliderList";
 import { makeImagePath } from "../utils";
 
@@ -100,10 +99,18 @@ export const Footer = styled.div<{ path: string }>`
 
 export const modalVariant = {
     hidden: {
-        opacity: 0
+        opacity: 0,
+        transition: {
+            duration: 2
+        }
     },
     visible: {
         opacity: 1
+    },
+    leave: {
+        transition: {
+            duration: 2
+        }
     }
 };
 
@@ -129,10 +136,6 @@ function Home() {
         visible: { x: 0 },
         exit: { x: -window.innerWidth - 10 }
     };
-
-    const [index, setIndex] = useState(0);
-
-    const [leaving, setLeaving] = useState(true);
 
     let movieMatch = useMatch('/movie/:theme/:id');
 
@@ -168,12 +171,12 @@ function Home() {
                     variants={modalVariant}
                     initial="hidden"
                     animate="visible"
-                    exit="hidden"
                     onClick={() => nav('/')}
                     >
                         <ModalWindow 
                         layoutId={movieMatch?.params.theme ? movieMatch?.params.theme + movieMatch?.params.id : ''}
-                        onClick={handleOnClick}>
+                        onClick={handleOnClick}
+                        >
                             <Modal />
                         </ModalWindow>
                     </ModalBackground>

@@ -21,3 +21,8 @@ export const tvBannerAtom = atom<ITvPopularResult | null>({
     key: 'tvBannerAtom',
     default: null
 });
+
+export const searchedIdAtom = atom<number>({
+    key: 'searchedId',
+    default: 0
+});

@@ -1,8 +1,10 @@
-import { AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
+import { searchedIdAtom } from "../atoms";
 import SearchedBox from "../components/SearchedBox";
 import SearchModal from "../components/SearchModal";
 import { fetchSearched, ISearched, ISearchedResult } from "../searchApi";
@@ -57,7 +59,7 @@ function Search() {
 
     const [isModalShown, setIsModalShown] = useState(false);
 
-    const [clicked, setClicked] = useState<ISearchedResult>();
+    const [clicked, setClicked] = useState<ISearchedResult | null>();
 
     const showModal = (id: number) => {
         setIsModalShown(true);
@@ -65,6 +67,12 @@ function Search() {
     };
 
     const findClicked = (id: number) => data?.results.find(datum => datum.id === id);
+
+    const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
+
+    const hideModal = () => {
+        setClicked(null);
+    };
 
     return (
         <>
@@ -84,29 +92,39 @@ function Search() {
                                 {
                                     data?.results.map((res, i) => {
                                         return (
-                                            <SearchResBox 
-                                            key={ i } 
-                                            bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
-                                            onClick={() => showModal(res.id)}
+                                            <motion.span
+                                            layoutId={res.id + ''}
                                             >
-                                                <SearchedBox searched={res}/>
-                                            </SearchResBox>
+                                                <SearchResBox 
+                                                key={ i } 
+                                                bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
+                                                onClick={() => showModal(res.id)}
+                                                >
+                                                    <SearchedBox searched={res}/>
+                                                </SearchResBox>
+                                            </motion.span>
                                         )
                                     })
                                 }
                             </div>
                             {
-                                !isModalShown ? null :
+                                !clicked ? null :
                                 <AnimatePresence>
                                     <ModalBackground
                                     variants={modalVariant}
                                     initial="hidden"
                                     animate="visible"
-                                    exit="hidden"
-                                    onClick={() => setIsModalShown(false)}
+                                    onClick={hideModal}
                                     >   
-                                        <ModalWindow>
-                                            <SearchModal clicked={clicked} />
+                                        <ModalWindow
+                                        onClick={preventBubbling}
+                                        layoutId={clicked?.id + ''}
+                                        >
+                                            {
+                                                clicked ? 
+                                                <SearchModal clicked={ clicked }/> 
+                                                : null
+                                            }
                                         </ModalWindow>
                                     </ModalBackground>
                                 </AnimatePresence>

@@ -1,6 +1,9 @@
+import { motion } from "framer-motion";
 import { url } from "inspector";
 import React from "react";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { searchedIdAtom } from "../atoms";
 import { ISearchedResult } from "../searchApi";
 import { makeImagePath } from "../utils";
 
@@ -19,7 +22,7 @@ const SearchedTitle = styled.p`
     width: 220px;
 `;
 
-const Box = styled.span`
+const Box = styled(motion.span)`
     position: relative;
     &:hover {
         ${SearchedTitle} {
@@ -54,8 +57,13 @@ const NoImage = styled.p`
 `;
 
 function SearchedBox({ searched }: { searched: ISearchedResult }) {
+
+    const setSearchedId = useSetRecoilState(searchedIdAtom);
+
     return (
-        <Box>
+        <Box
+        onClick={() => setSearchedId(searched.id)}
+        >
             <SearchedImg 
             path={
                 searched.backdrop_path ?
