@@ -57,12 +57,9 @@ function Search() {
     const {isLoading, data} = useQuery<ISearched>(['searched', keyword], () => fetchSearched(keyword || ''));
     console.log(data);
 
-    const [isModalShown, setIsModalShown] = useState(false);
-
     const [clicked, setClicked] = useState<ISearchedResult | null>();
 
     const showModal = (id: number) => {
-        setIsModalShown(true);
         setClicked(() => findClicked(id));
     };
 
@@ -70,9 +67,7 @@ function Search() {
 
     const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
-    const hideModal = () => {
-        setClicked(null);
-    };
+    const hideModal = () => setClicked(null);
 
     return (
         <>
@@ -114,17 +109,14 @@ function Search() {
                                     variants={modalVariant}
                                     initial="hidden"
                                     animate="visible"
+                                    exit="leave"
                                     onClick={hideModal}
                                     >   
                                         <ModalWindow
                                         onClick={preventBubbling}
                                         layoutId={clicked?.id + ''}
                                         >
-                                            {
-                                                clicked ? 
-                                                <SearchModal clicked={ clicked }/> 
-                                                : null
-                                            }
+                                            <SearchModal clicked={ clicked }/>
                                         </ModalWindow>
                                     </ModalBackground>
                                 </AnimatePresence>

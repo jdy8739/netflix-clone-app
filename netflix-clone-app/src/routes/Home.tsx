@@ -125,23 +125,13 @@ export const boxVariant = {
     }
 };
 
-const BOX_OFFSET = 1;
-
-const NUM_OF_BOX_IN_A_ROW = 6;
-
 function Home() {
-
-    const sliderVariant = {
-        hidden: { x: window.innerWidth + 10 },
-        visible: { x: 0 },
-        exit: { x: -window.innerWidth - 10 }
-    };
-
+    
     let movieMatch = useMatch('/movie/:theme/:id');
 
     const nav = useNavigate();
 
-    const handleOnClick = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
+    const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
     const banner = useRecoilValue(bannerAtom);
 
@@ -175,7 +165,7 @@ function Home() {
                     >
                         <ModalWindow 
                         layoutId={movieMatch?.params.theme ? movieMatch?.params.theme + movieMatch?.params.id : ''}
-                        onClick={handleOnClick}
+                        onClick={preventBubbling}
                         >
                             <Modal />
                         </ModalWindow>
