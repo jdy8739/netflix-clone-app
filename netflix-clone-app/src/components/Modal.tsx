@@ -4,7 +4,7 @@ import { INowPlayingResult } from "../api";
 import { movieAtom } from "../atoms";
 import { makeImagePath } from "../utils";
 
-const ModalInfo = styled.div`
+export const ModalInfo = styled.div`
     background-color: rgb(34, 34, 36);
     width: 100%;
     height: 100%;
@@ -12,7 +12,7 @@ const ModalInfo = styled.div`
     text-align: center;
 `;
 
-const ModalImage = styled.div<{ path: string }>`
+export const ModalImage = styled.div<{ path: string }>`
     background-image: linear-gradient(to top, black, transparent), url(${props => props.path});
     width: 100%;
     height: 70%;
@@ -21,7 +21,7 @@ const ModalImage = styled.div<{ path: string }>`
     position: relative;
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
     position: absolute;
     bottom: 10px;
     left: 0;
@@ -29,7 +29,7 @@ const Title = styled.h1`
     margin: auto;
 `;
 
-const Overview = styled.div`
+export const Overview = styled.div`
     padding: 12px;
 `;
 

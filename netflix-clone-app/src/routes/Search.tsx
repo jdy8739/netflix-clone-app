@@ -1,9 +1,12 @@
+import { AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import SearchedBox from "../components/SearchedBox";
-import { fetchSearched, ISearched } from "../searchApi";
+import SearchModal from "../components/SearchModal";
+import { fetchSearched, ISearched, ISearchedResult } from "../searchApi";
+import { ModalBackground, modalVariant, ModalWindow } from "./Home";
 
 const Alert = styled.p`
     color: white;
@@ -54,11 +57,15 @@ function Search() {
 
     const [isModalShown, setIsModalShown] = useState(false);
 
+    const [clicked, setClicked] = useState<ISearchedResult>();
+
     const showModal = (id: number) => {
-        alert(id);
         setIsModalShown(true);
+        setClicked(() => findClicked(id));
     };
-    
+
+    const findClicked = (id: number) => data?.results.find(datum => datum.id === id);
+
     return (
         <>
             {
@@ -88,6 +95,22 @@ function Search() {
                                     })
                                 }
                             </div>
+                            {
+                                !isModalShown ? null :
+                                <AnimatePresence>
+                                    <ModalBackground
+                                    variants={modalVariant}
+                                    initial="hidden"
+                                    animate="visible"
+                                    exit="hidden"
+                                    onClick={() => setIsModalShown(false)}
+                                    >   
+                                        <ModalWindow>
+                                            <SearchModal clicked={clicked} />
+                                        </ModalWindow>
+                                    </ModalBackground>
+                                </AnimatePresence>
+                            }
                         </>
                     }
                 </>
