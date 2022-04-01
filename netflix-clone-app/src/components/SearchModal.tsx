@@ -50,7 +50,13 @@ function SearchModal({ clicked }: { clicked: ISearchedResult }) {
                 }
                 {
                     clicked.release_date || clicked.first_air_date ? 
-                    <ReleaseDate>first aired: { clicked?.release_date || clicked?.first_air_date }</ReleaseDate> : null
+                    <ReleaseDate>
+                        { 
+                            clicked.release_date ? 
+                            "released: " + clicked.release_date : 
+                            "first aired: " + clicked.first_air_date 
+                        }
+                    </ReleaseDate> : null
                 }
                 <Overview>
                     { 
