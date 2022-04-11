@@ -55,7 +55,7 @@ function Search() {
     const keyword = new URLSearchParams(location.search).get('keyword');
 
     const {isLoading, data} = useQuery<ISearched>(['searched', keyword], () => fetchSearched(keyword || ''));
-    
+
     const [clicked, setClicked] = useState<ISearchedResult | null>();
 
     const showModal = (id: number) => {
@@ -87,6 +87,7 @@ function Search() {
                                     data?.results.map((res, i) => {
                                         return (
                                             <motion.span
+                                            key={ i }
                                             layoutId={res.id + ''}
                                             >
                                                 <SearchResBox 
