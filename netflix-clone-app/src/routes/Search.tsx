@@ -1,13 +1,12 @@
+import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useLocation } from "react-router";
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
-import { searchedIdAtom } from "../atoms";
 import SearchedBox from "../components/SearchedBox";
 import SearchModal from "../components/SearchModal";
-import { fetchSearched, ISearched, ISearchedResult } from "../searchApi";
+import { BASE_URL, fetchSearched, ISearched, ISearchedResult, KEY } from "../searchApi";
 import { ModalBackground, modalVariant, ModalWindow } from "./Home";
 
 const Alert = styled.p`
@@ -54,8 +53,13 @@ function Search() {
     
     const keyword = new URLSearchParams(location.search).get('keyword');
 
-    const {isLoading, data} = useQuery<ISearched>(['searched', keyword], () => fetchSearched(keyword || ''));
+    const {isLoading, data} = useQuery<ISearched>(
+        ['searched', keyword], () => fetchSearched(keyword || ''));
 
+    const lastPage = data?.total_pages || 0;
+
+    const [page, setPage] = useState(2);
+    
     const [clicked, setClicked] = useState<ISearchedResult | null>();
 
     const showModal = (id: number) => {
@@ -67,6 +71,28 @@ function Search() {
     const preventBubbling = (e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation();
 
     const hideModal = () => setClicked(null);
+
+    const handleScroll = async () => {
+        const scrollHeight = document.documentElement.scrollHeight;
+        const scrollTop = document.documentElement.scrollTop;
+        const clientHeight = document.documentElement.clientHeight;
+
+        if(scrollTop + clientHeight >= scrollHeight && page <= lastPage) {
+            axios.get(
+                `${BASE_URL}/multi?api_key=${KEY}&query=${keyword}&language=en-US&page=${page}`)
+                .then(res => {
+                    data?.results.splice(data.results.length, 0, ...res.data.results);
+                    setPage(page => page + 1);
+                });
+        };
+    };
+
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+          window.removeEventListener("scroll", handleScroll);
+        };
+    });
 
     return (
         <>
@@ -91,7 +117,6 @@ function Search() {
                                             layoutId={res.id + ''}
                                             >
                                                 <SearchResBox 
-                                                key={ i } 
                                                 bigSize={ i % 4 === 0 || (i + 1) % 4 === 0 }
                                                 onClick={() => showModal(res.id)}
                                                 >
@@ -102,9 +127,9 @@ function Search() {
                                     })
                                 }
                             </div>
-                            {
-                                !clicked ? null :
-                                <AnimatePresence>
+                            <AnimatePresence>
+                                {
+                                    !clicked ? null :
                                     <ModalBackground
                                     variants={modalVariant}
                                     initial="hidden"
@@ -119,8 +144,8 @@ function Search() {
                                             <SearchModal clicked={ clicked }/>
                                         </ModalWindow>
                                     </ModalBackground>
-                                </AnimatePresence>
-                            }
+                                }
+                            </AnimatePresence>
                         </>
                     }
                 </>
