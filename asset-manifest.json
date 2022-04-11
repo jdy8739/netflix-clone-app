@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.js": "/netflix-clone-app/static/js/main.132d5dde.js",
+    "main.js": "/netflix-clone-app/static/js/main.b0da923b.js",
     "static/media/play_btn.png": "/netflix-clone-app/static/media/play_btn.1bfd04e4e11fcd18fe59.png",
     "static/media/search_icon.png": "/netflix-clone-app/static/media/search_icon.f6630f53689884ef1260.png",
     "index.html": "/netflix-clone-app/index.html",
-    "main.132d5dde.js.map": "/netflix-clone-app/static/js/main.132d5dde.js.map"
+    "main.b0da923b.js.map": "/netflix-clone-app/static/js/main.b0da923b.js.map"
   },
   "entrypoints": [
-    "static/js/main.132d5dde.js"
+    "static/js/main.b0da923b.js"
   ]
 }
