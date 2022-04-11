@@ -73,6 +73,7 @@ function Search() {
     const hideModal = () => setClicked(null);
 
     const handleScroll = async () => {
+        
         const scrollHeight = document.documentElement.scrollHeight;
         const scrollTop = document.documentElement.scrollTop;
         const clientHeight = document.documentElement.clientHeight;
